@@ -519,6 +519,13 @@ pub fn set_name(name: &CStr) {
     debug_assert_eq!(res, libc::OK);
 }
 
+#[cfg(target_os = "seele")]
+pub fn set_name(_name: &CStr) {
+    // Seele does not expose a thread naming API yet.
+    #[cfg(debug_assertions)]
+    eprintln!("std: thread::set_name is unsupported on seele");
+}
+
 #[cfg(not(target_os = "espidf"))]
 pub fn sleep(dur: Duration) {
     cfg_select! {

@@ -347,6 +347,12 @@ pub fn current_exe() -> io::Result<PathBuf> {
     crate::fs::read_to_string("/scheme/sys/exe").map(PathBuf::from)
 }
 
+#[cfg(target_os = "seele")]
+pub fn current_exe() -> io::Result<PathBuf> {
+    eprintln!("current_exe called in rust std which is unimplemented (seele)");
+    Err(io::const_error!(io::ErrorKind::Unsupported, "current_exe is not supported on seele"))
+}
+
 #[cfg(target_os = "rtems")]
 pub fn current_exe() -> io::Result<PathBuf> {
     crate::fs::read_to_string("sys:exe").map(PathBuf::from)
