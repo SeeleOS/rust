@@ -505,6 +505,7 @@ pub const F_SETFL: c_int = 4;
 // FIXME(redox): relibc {
 pub const F_DUPFD_CLOEXEC: c_int = crate::F_DUPFD;
 // }
+#[cfg_attr(target_os = "seele", allow(dead_code))]
 pub const FD_CLOEXEC: c_int = 0x0100_0000;
 pub const O_RDONLY: c_int = 0x0001_0000;
 pub const O_WRONLY: c_int = 0x0002_0000;

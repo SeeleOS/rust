@@ -24,6 +24,7 @@
 #![feature(staged_api)]
 #![feature(process_exitcode_internals)]
 #![feature(panic_can_unwind)]
+#![cfg_attr(target_os = "seele", feature(restricted_std))]
 #![cfg_attr(test, feature(test))]
 #![feature(thread_spawn_hook)]
 #![allow(internal_features)]
