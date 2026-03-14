@@ -6,6 +6,7 @@ use crate::spec::{
 pub(crate) fn target() -> Target {
     let opts = TargetOptions {
         os: Os::Other("seele".into()),
+        families: crate::spec::cvs!["unix"],
         linker_flavor: LinkerFlavor::Gnu(Cc::No, Lld::Yes),
         linker: Some("rust-lld".into()),
         plt_by_default: false,
