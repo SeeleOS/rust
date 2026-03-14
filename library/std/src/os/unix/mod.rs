@@ -75,7 +75,7 @@ mod platform {
     pub use crate::os::nuttx::*;
     #[cfg(target_os = "openbsd")]
     pub use crate::os::openbsd::*;
-    #[cfg(target_os = "redox")]
+    #[cfg(any(target_os = "redox", target_os = "seele"))]
     pub use crate::os::redox::*;
     #[cfg(target_os = "rtems")]
     pub use crate::os::rtems::*;

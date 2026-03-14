@@ -165,7 +165,7 @@ pub mod nto;
 pub mod nuttx;
 #[cfg(target_os = "openbsd")]
 pub mod openbsd;
-#[cfg(target_os = "redox")]
+#[cfg(any(target_os = "redox", target_os = "seele"))]
 pub mod redox;
 #[cfg(target_os = "rtems")]
 pub mod rtems;
