@@ -1214,6 +1214,7 @@ extern "C" {
         groups: *mut crate::gid_t,
         ngroups: *mut c_int,
     ) -> c_int;
+    pub fn setgroups(ngroups: size_t, ptr: *const crate::gid_t) -> c_int;
 
     // malloc.h
     pub fn memalign(align: size_t, size: size_t) -> *mut c_void;
