@@ -1,11 +1,12 @@
 use crate::spec::{
-    Arch, Cc, CodeModel, LinkerFlavor, Lld, Os, PanicStrategy, RelroLevel, RustcAbi, SanitizerSet,
-    StackProbeType, Target, TargetMetadata, TargetOptions,
+    Arch, Cc, CodeModel, Env, LinkerFlavor, Lld, Os, PanicStrategy, RelroLevel, RustcAbi,
+    SanitizerSet, StackProbeType, Target, TargetMetadata, TargetOptions,
 };
 
 pub(crate) fn target() -> Target {
     let opts = TargetOptions {
         os: Os::Other("seele".into()),
+        env: Env::Relibc,
         families: crate::spec::cvs!["unix"],
         linker_flavor: LinkerFlavor::Gnu(Cc::No, Lld::Yes),
         linker: Some("rust-lld".into()),
