@@ -1,6 +1,7 @@
 use crate::spec::{
-    Arch, Cc, CodeModel, Env, LinkerFlavor, Lld, Os, PanicStrategy, RelroLevel, RustcAbi,
-    SanitizerSet, StackProbeType, Target, TargetMetadata, TargetOptions,
+    crt_objects, Arch, Cc, CodeModel, Env, LinkSelfContainedDefault, LinkerFlavor, Lld, Os,
+    PanicStrategy, RelroLevel, RustcAbi, SanitizerSet, StackProbeType, Target, TargetMetadata,
+    TargetOptions,
 };
 
 pub(crate) fn target() -> Target {
@@ -21,7 +22,13 @@ pub(crate) fn target() -> Target {
         supported_sanitizers: SanitizerSet::KCFI | SanitizerSet::KERNELADDRESS,
         disable_redzone: true,
         panic_strategy: PanicStrategy::Abort,
-        code_model: Some(CodeModel::Kernel),
+        // Userland code, not the kernel itself.
+        code_model: Some(CodeModel::Small),
+        // Use relibc's CRT objects directly; we copy them into the target's
+        // rustlib directory as part of the Seele toolchain install.
+        pre_link_objects_self_contained: crt_objects::pre_seele_self_contained(),
+        post_link_objects_self_contained: crt_objects::post_seele_self_contained(),
+        link_self_contained: LinkSelfContainedDefault::True,
         ..Default::default()
     };
 
