@@ -24,11 +24,18 @@ pub(crate) fn target() -> Target {
         panic_strategy: PanicStrategy::Abort,
         // Userland code, not the kernel itself.
         code_model: Some(CodeModel::Small),
-        // Use relibc's CRT objects directly; we copy them into the target's
-        // rustlib directory as part of the Seele toolchain install.
-        pre_link_objects_self_contained: crt_objects::pre_seele_self_contained(),
-        post_link_objects_self_contained: crt_objects::post_seele_self_contained(),
-        link_self_contained: LinkSelfContainedDefault::True,
+        // Always link against relibc's CRT objects for this target.
+        //
+        // 之前我们把它们挂在 `pre_link_objects_self_contained` 上，
+        // 依赖 `link_self_contained` / self-contained 组件机制，
+        // 结果在实际链接里没有稳定地把 `crt0.o` 拉进来，最后 ELF 的
+        // `e_entry` 还是 0。
+        //
+        // 为了简单粗暴、可预期，直接用普通的 `pre_link_objects` /
+        // `post_link_objects` 路径，不再依赖 self-contained 组件。
+        pre_link_objects: crt_objects::pre_seele_self_contained(),
+        post_link_objects: crt_objects::post_seele_self_contained(),
+        link_self_contained: LinkSelfContainedDefault::False,
         ..Default::default()
     };
 
