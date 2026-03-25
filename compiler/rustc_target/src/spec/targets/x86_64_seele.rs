@@ -1,16 +1,19 @@
 use crate::spec::{
-    crt_objects, Arch, Cc, CodeModel, Env, LinkSelfContainedDefault, LinkerFlavor, Lld, Os,
-    PanicStrategy, RelroLevel, RustcAbi, SanitizerSet, StackProbeType, Target, TargetMetadata,
-    TargetOptions,
+    Arch, Cc, CodeModel, Env, LinkSelfContainedDefault, LinkerFlavor, Lld, Os, PanicStrategy,
+    RelroLevel, RustcAbi, SanitizerSet, StackProbeType, Target, TargetMetadata, TargetOptions,
+    crt_objects,
 };
 
 pub(crate) fn target() -> Target {
-    let opts = TargetOptions {
+    let mut opts = TargetOptions {
         os: Os::Other("seele".into()),
         env: Env::Relibc,
         families: crate::spec::cvs!["unix"],
-        linker_flavor: LinkerFlavor::Gnu(Cc::No, Lld::Yes),
-        linker: Some("rust-lld".into()),
+        // Cc::Yes means use the compiler as the linker instead of the actual linker
+        // Uses our custom clang as the linker so it can recognize
+        // the seele target and beable to link the crt and libc.
+        linker_flavor: LinkerFlavor::Gnu(Cc::Yes, Lld::No),
+        linker: Some("clang".into()),
         plt_by_default: false,
         max_atomic_width: Some(64),
         stack_probes: StackProbeType::Inline,
@@ -24,23 +27,16 @@ pub(crate) fn target() -> Target {
         panic_strategy: PanicStrategy::Abort,
         // Userland code, not the kernel itself.
         code_model: Some(CodeModel::Small),
-        // Always link against relibc's CRT objects for this target.
-        //
-        // 之前我们把它们挂在 `pre_link_objects_self_contained` 上，
-        // 依赖 `link_self_contained` / self-contained 组件机制，
-        // 结果在实际链接里没有稳定地把 `crt0.o` 拉进来，最后 ELF 的
-        // `e_entry` 还是 0。
-        //
-        // 为了简单粗暴、可预期，直接用普通的 `pre_link_objects` /
-        // `post_link_objects` 路径，不再依赖 self-contained 组件。
-        pre_link_objects: crt_objects::pre_seele_self_contained(),
-        post_link_objects: crt_objects::post_seele_self_contained(),
-        link_self_contained: LinkSelfContainedDefault::False,
         ..Default::default()
     };
 
+    opts.add_pre_link_args(
+        LinkerFlavor::Gnu(Cc::Yes, Lld::No),
+        &["--target=x86_64-unknown-seele", "-m64"],
+    );
+
     Target {
-        llvm_target: "x86_64-unknown-none-elf".into(),
+        llvm_target: "x86_64-unknown-seele".into(),
         metadata: TargetMetadata {
             description: Some("Freestanding/bare-metal x86_64 softfloat".into()),
             tier: Some(2),
