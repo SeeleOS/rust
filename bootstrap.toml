@@ -1,0 +1,4 @@
+[target.x86_64-seele]
+cc = "clang"
+cxx = "clang++"
+linker = "clang"
