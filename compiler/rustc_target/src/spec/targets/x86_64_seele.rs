@@ -1,7 +1,6 @@
 use crate::spec::{
-    Arch, Cc, CodeModel, Env, LinkSelfContainedDefault, LinkerFlavor, Lld, Os, PanicStrategy,
-    RelroLevel, RustcAbi, SanitizerSet, StackProbeType, Target, TargetMetadata, TargetOptions,
-    crt_objects,
+    Arch, Cc, CodeModel, Env, LinkerFlavor, Lld, Os, PanicStrategy, RelroLevel, RustcAbi,
+    SanitizerSet, StackProbeType, Target, TargetMetadata, TargetOptions,
 };
 
 pub(crate) fn target() -> Target {
@@ -14,11 +13,15 @@ pub(crate) fn target() -> Target {
         // the seele target and beable to link the crt and libc.
         linker_flavor: LinkerFlavor::Gnu(Cc::Yes, Lld::No),
         linker: Some("clang".into()),
+        dynamic_linking: true,
+        has_rpath: true,
         plt_by_default: false,
         max_atomic_width: Some(64),
         stack_probes: StackProbeType::Inline,
-        position_independent_executables: false,
+        position_independent_executables: true,
         static_position_independent_executables: false,
+        crt_static_default: false,
+        crt_static_respected: true,
         relro_level: RelroLevel::Full,
         rustc_abi: Some(RustcAbi::Softfloat),
         features: "-mmx,-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,+soft-float".into(),

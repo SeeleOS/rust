@@ -133,29 +133,3 @@ pub(super) fn pre_wasi_self_contained() -> CrtObjects {
 pub(super) fn post_wasi_self_contained() -> CrtObjects {
     new(&[])
 }
-
-/// Seele OS (relibc) self-contained CRT objects.
-///
-/// We use the relibc-provided `crt0.o` as the entry point, with `crti.o`/`crtn.o`
-/// providing the usual constructor/destructor sections.
-pub(super) fn pre_seele_self_contained() -> CrtObjects {
-    new(&[
-        (LinkOutputKind::DynamicNoPicExe, &["crt0.o", "crti.o"]),
-        (LinkOutputKind::DynamicPicExe, &["crt0.o", "crti.o"]),
-        (LinkOutputKind::StaticNoPicExe, &["crt0.o", "crti.o"]),
-        (LinkOutputKind::StaticPicExe, &["crt0.o", "crti.o"]),
-        (LinkOutputKind::DynamicDylib, &["crti.o"]),
-        (LinkOutputKind::StaticDylib, &["crti.o"]),
-    ])
-}
-
-pub(super) fn post_seele_self_contained() -> CrtObjects {
-    new(&[
-        (LinkOutputKind::DynamicNoPicExe, &["crtn.o"]),
-        (LinkOutputKind::DynamicPicExe, &["crtn.o"]),
-        (LinkOutputKind::StaticNoPicExe, &["crtn.o"]),
-        (LinkOutputKind::StaticPicExe, &["crtn.o"]),
-        (LinkOutputKind::DynamicDylib, &["crtn.o"]),
-        (LinkOutputKind::StaticDylib, &["crtn.o"]),
-    ])
-}
