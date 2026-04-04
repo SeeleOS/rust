@@ -44,7 +44,7 @@ pub(crate) fn target() -> Target {
             description: Some("Freestanding/bare-metal x86_64 softfloat".into()),
             tier: Some(2),
             host_tools: Some(false),
-            std: Some(false),
+            std: Some(true),
         },
         pointer_width: 64,
         data_layout:

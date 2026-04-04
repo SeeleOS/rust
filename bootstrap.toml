@@ -2,3 +2,12 @@
 cc = "clang"
 cxx = "clang++"
 linker = "clang"
+ar = "llvm-ar"
+ranlib = "llvm-ranlib"
+
+[target.x86_64-unknown-seele]
+cc = "clang"
+cxx = "clang++"
+linker = "clang"
+ar = "llvm-ar"
+ranlib = "llvm-ranlib"
