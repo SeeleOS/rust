@@ -147,7 +147,7 @@ dependencies = [
 [[package]]
 name = "libc"
 version = "0.2.184"
-source = "git+https://github.com/SeeleOS/rust-libc?branch=libc-0.2#70a1f592b038f3994fcc5354542b43819448469d"
+source = "git+https://github.com/SeeleOS/rust-libc?branch=libc-0.2#1e047742d0665a1e9c544a154cb71fb4d402b424"
 dependencies = [
  "rustc-std-workspace-core",
 ]
