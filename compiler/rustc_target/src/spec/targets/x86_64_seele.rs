@@ -1,6 +1,6 @@
 use crate::spec::{
-    Arch, Cc, CodeModel, Env, LinkerFlavor, Lld, Os, PanicStrategy, RelroLevel, RustcAbi,
-    SanitizerSet, StackProbeType, Target, TargetMetadata, TargetOptions,
+    Arch, Cc, CodeModel, Env, LinkerFlavor, Lld, Os, PanicStrategy, RelroLevel, SanitizerSet,
+    StackProbeType, Target, TargetMetadata, TargetOptions,
 };
 
 pub(crate) fn target() -> Target {
@@ -23,8 +23,7 @@ pub(crate) fn target() -> Target {
         crt_static_default: false,
         crt_static_respected: false,
         relro_level: RelroLevel::Full,
-        rustc_abi: Some(RustcAbi::Softfloat),
-        features: "-mmx,-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,+soft-float".into(),
+        features: "-mmx,-avx,-avx2".into(),
         supported_sanitizers: SanitizerSet::KCFI | SanitizerSet::KERNELADDRESS,
         disable_redzone: true,
         panic_strategy: PanicStrategy::Abort,
